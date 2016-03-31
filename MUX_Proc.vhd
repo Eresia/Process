@@ -2,7 +2,7 @@ LIBRARY ieee;
 USE ieee.std_logic_1164.all;
 
 -- Done
-ENTITY MUX IS
+ENTITY MUX_Proc IS
 PORT(
 	Sel: IN std_logic_vector(0 TO 4);
 	G: IN std_logic_vector(0 TO 15);
@@ -17,9 +17,9 @@ PORT(
 	R7: IN std_logic_vector(0 TO 15);
 	B:OUT std_logic_vector(0 TO 15)
 );
-END MUX;
+END MUX_Proc;
 	
-ARCHITECTURE Behavior OF MUX IS
+ARCHITECTURE Behavior OF MUX_Proc IS
 
 
 BEGIN

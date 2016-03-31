@@ -14,7 +14,7 @@ Architecture Behavior of Regist IS
 BEGIN
 	PROCESS(Clock)
 	BEGIN
-		if w = '1' then
+		if (Clock'event and Clock = '1') and w = '1' then
 			O <= I;
 		end if;
 	END PROCESS;

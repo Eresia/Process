@@ -32,17 +32,34 @@ PORT (
 	State: OUT Integer;
 	OPPrint: OUT std_logic_vector(0 TO 2);
 	whichWrite: OUT std_logic_vector(0 TO 7);
-	addPrint: OUT std_logic_vector(0 TO 15)
+	addPrint: OUT std_logic_vector(0 TO 15);
+	R0, R1, R2, R3: OUT std_logic_vector(0 TO 15)
 );
 END Component;
 
-Component Memory IS
+Component Memory_Test IS
 PORT(
 	Done, Reset: IN std_logic;
 	result : OUT std_logic_vector(0 TO 15);
 	instructionStates: OUT integer
 );
 END Component;
+
+--Component Memory is
+--port (
+	--clk_clk            : in  std_logic                     := '0';             --    clk.clk
+	--reset_reset        : in  std_logic                     := '0';             --  reset.reset
+	--reset_reset_req    : in  std_logic                     := '0';             --       .reset_req
+	--sortie_address     : in  std_logic_vector(7 downto 0)  := (others => '0'); -- sortie.address
+	--sortie_debugaccess : in  std_logic                     := '0';             --       .debugaccess
+	--sortie_clken       : in  std_logic                     := '0';             --       .clken
+	--sortie_chipselect  : in  std_logic                     := '0';             --       .chipselect
+	--sortie_write       : in  std_logic                     := '0';             --       .write
+	--sortie_readdata    : out std_logic_vector(15 downto 0);                    --       .readdata
+	--sortie_writedata   : in  std_logic_vector(15 downto 0) := (others => '0'); --       .writedata
+	--sortie_byteenable  : in  std_logic_vector(1 downto 0)  := (others => '0')  --       .byteenable
+--);
+--end Component;
 
 Component segment_nombre_hexa IS
 PORT(
@@ -78,24 +95,27 @@ signal instDiz: integer;
 signal addPrint: std_logic_vector(0 TO 15);
 signal manual: std_logic;
 signal memoryResult: std_logic_vector(0 TO 15);
+signal R0, R1, R2, R3: std_logic_vector(0 TO 15);
 	
 BEGIN
 	debounc0 : debouncer PORT MAP (KEY(0), CLOCK_50, so);
 	debounc1 : debouncer PORT MAP (KEY(1), CLOCK_50, soR);
 	nso <= not so;
 	nsoR <= not soR;
-	proc0: Proc port map(Clock=>nso, Run=>SW(17), Reset=>soR, DIN=>DIN, Done=>Done, Overflow=>LEDG(7), B=>B, State=>State, OPPrint=>OPPrint, whichWrite=>whichWrite, addPrint=>addPrint);
-	memory0 : Memory port map(Done=>Done, Reset=>nsoR, result=>memoryResult, instructionStates=>instructionStates);
+	proc0: Proc port map(Clock=>nso, Run=>SW(17), Reset=>soR, DIN=>DIN, Done=>Done, Overflow=>LEDG(7), B=>B, State=>State, OPPrint=>OPPrint, whichWrite=>whichWrite, 
+				addPrint=>addPrint, R0=>R0, R1=>R1, R2=>R2, R3=>R3);
+				
+	--Notre mémoire
+	memory_test0 : Memory_Test port map(Done=>Done, Reset=>nsoR, result=>memoryResult, instructionStates=>instructionStates);
+	
+	--Mémoire auto :
+	--memory0: Memory port map(clk_clk=>Done, reset_reset=>soR, sortie_readdata=>memoryResult);
+	
 	manual <= SW(16);
 	
-	manualProcess: PROCESS(manual)
-	BEGIN
-		if manual = '0' then
-			DIN <= memoryResult;
-		else
-			DIN <= SW(0 TO 15);
-		end if;
-	END PROCESS;
+	with manual select
+		DIN <= 	memoryResult when '0',
+					SW(0 TO 15) when '1';
 	
 	
 	-------------------------------------------------------------Affichage
@@ -111,13 +131,37 @@ BEGIN
 	--seg2: segment_nombre_hexa port map(C=>addPrint(8 TO 11), O=>HEX1);
 	--seg3: segment_nombre_hexa port map(C=>addPrint(12 TO 15), O=>HEX0);
 	
+	--Affichage R0
+	--seg0: segment_nombre_hexa port map(C=>R0(0 TO 3), O=>HEX3);
+	--seg1: segment_nombre_hexa port map(C=>R0(4 TO 7), O=>HEX2);
+	--seg2: segment_nombre_hexa port map(C=>R0(8 TO 11), O=>HEX1);
+	--seg3: segment_nombre_hexa port map(C=>R0(12 TO 15), O=>HEX0);
+	
+	--Affichage R0-R1
+	--seg0: segment_nombre_hexa port map(C=>R0(8 TO 11), O=>HEX3);
+	--seg1: segment_nombre_hexa port map(C=>R0(12 TO 15), O=>HEX2);
+	--seg2: segment_nombre_hexa port map(C=>R1(8 TO 11), O=>HEX1);
+	--seg3: segment_nombre_hexa port map(C=>R1(12 TO 15), O=>HEX0);
+	
+	--Affichage R0-R1-R2
+	--seg0: segment_nombre_hexa port map(C=>R0(12 TO 15), O=>HEX3);
+	--seg1: segment_nombre_hexa port map(C=>R1(12 TO 15), O=>HEX2);
+	--seg2: segment_nombre_hexa port map(C=>R2(8 TO 11), O=>HEX1);
+	--seg3: segment_nombre_hexa port map(C=>R2(12 TO 15), O=>HEX0);
+	
 	-- Affichage OP
 	op <= '0' & OPPrint;
 	--seg4: segment_nombre_hexa port map(C=>op, O=>HEX4);
 	
-	--Affichage nbOperation
-	instUnit <= instructionStates mod 10;
-	instDiz <= instructionStates / 10;
+	--Affichage nbOperation	
+	with instructionStates select
+		instUnit <= 	9 when -1,
+							instructionStates mod 10 when OTHERS;
+							
+	with instructionStates select
+		instDiz <= 	9 when -1,
+						instructionStates / 10 when OTHERS;
+	
 	seg4: segment_nombre_dec port map(C=>instUnit, O=>HEX4);
 	seg5: segment_nombre_dec port map(C=>instDiz, O=>HEX5);
 	seg7: segment_nombre_dec port map(C=>State, O=>HEX7);

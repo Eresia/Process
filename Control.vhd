@@ -6,12 +6,11 @@ ENTITY Control IS
 PORT(
 	OP: IN std_logic_vector(0 TO 8);
 	Run, Reset, Clock: IN std_logic;
-	Set: OUT std_logic_vector(0 TO 11);
+	Set: OUT std_logic_vector(0 TO 13);
 	Sel: OUT std_logic_vector(0 TO 4);
 	Done: OUT std_logic;
 	State: OUT Integer;
-	OPPrint: OUT std_logic_vector(0 TO 2);
-	whichWrite: OUT std_logic_vector(0 TO 7)
+	OPPrint: OUT std_logic_vector(0 TO 2)
 );
 END Control;
 
@@ -72,7 +71,7 @@ BEGIN
 	
 	OL: PROCESS(Cs, OP)
 	BEGIN
-		Set <= "000000000000";
+		Set <= "00000000000000";
 		Sel <= "00000";
 		Done <= '0';
 		if run='1' then
@@ -83,37 +82,37 @@ BEGIN
 				when 3 =>
 					Sel(2 TO 4) <= OP(3 TO 5);
 					DemI <= OP(6 TO 8);
-					Set(4 TO 11) <= DemO;
+					Set(6 TO 13) <= DemO;
 				when 4 =>
 					Done <= '1';
 				when 5 =>
 					Sel(1) <= '1';
 					DemI <= OP(3 TO 5);
-					Set(4 TO 11) <= DemO;
+					Set(6 TO 13) <= DemO;
 				when 6 =>
 					Sel(2 TO 4) <= OP(3 TO 5);
 					Set(1) <= '1';
 				when 7 =>
 					Sel(2 TO 4) <= OP(6 TO 8);
 					Set(2) <= '1';
-					Set(3) <= '1';
+					Set(3 TO 5) <= "001";
 				when 8 =>
 					Sel(0) <= '1';
 					DemI <= OP(3 TO 5);
-					Set(4 TO 11) <= DemO;
+					Set(6 TO 13) <= DemO;
 				when 9 =>
-					Set(1) <= '1';
 					Sel(2 TO 4) <= OP(3 TO 5);
+					Set(1) <= '1';
 				when 10 =>
 					Sel(2 TO 4) <= OP(6 TO 8);
 					Set(2) <= '1';
-					Set(3) <= '0';
+					Set(3 TO 5) <= "000";
 				when OTHERS => NULL;
 			end case;
 		end if;
 	END Process;
 	
-	SM: PROCESS(Clock)
+	SM: PROCESS(Reset, Clock)
 	BEGIN
 		if Reset = '0' then
 			Cs <= 0;
@@ -126,6 +125,5 @@ BEGIN
 
 	State <= Cs;
 	OPPrint <= OP(0 to 2);
-	whichWrite <= DemO;
 
 END Behavior;
