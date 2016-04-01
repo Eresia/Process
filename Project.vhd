@@ -9,6 +9,7 @@ PORT(
 	LEDG:OUT	STD_LOGIC_VECTOR(0 TO 7);
 	KEY:IN STD_LOGIC_VECTOR(0 TO 3);
 	CLOCK_50: IN STD_LOGIC;
+	MClock: IN STD_LOGIC;
 	HEX0:OUT STD_LOGIC_VECTOR(0 TO 6);
 	HEX1:OUT STD_LOGIC_VECTOR(0 TO 6);
 	HEX2:OUT STD_LOGIC_VECTOR(0 TO 6);
@@ -45,21 +46,23 @@ PORT(
 );
 END Component;
 
---Component Memory is
---port (
-	--clk_clk            : in  std_logic                     := '0';             --    clk.clk
-	--reset_reset        : in  std_logic                     := '0';             --  reset.reset
-	--reset_reset_req    : in  std_logic                     := '0';             --       .reset_req
-	--sortie_address     : in  std_logic_vector(7 downto 0)  := (others => '0'); -- sortie.address
-	--sortie_debugaccess : in  std_logic                     := '0';             --       .debugaccess
-	--sortie_clken       : in  std_logic                     := '0';             --       .clken
-	--sortie_chipselect  : in  std_logic                     := '0';             --       .chipselect
-	--sortie_write       : in  std_logic                     := '0';             --       .write
-	--sortie_readdata    : out std_logic_vector(15 downto 0);                    --       .readdata
-	--sortie_writedata   : in  std_logic_vector(15 downto 0) := (others => '0'); --       .writedata
-	--sortie_byteenable  : in  std_logic_vector(1 downto 0)  := (others => '0')  --       .byteenable
---);
---end Component;
+Component Counter IS
+PORT
+	(
+		Clock, Reset : IN std_logic;
+		instructionState : OUT integer;
+		addr : OUT std_logic_vector( 4 DOWNTO 0)
+	);
+END Component;
+
+Component rom IS
+PORT
+	(
+		address		: IN STD_LOGIC_VECTOR (4 DOWNTO 0);
+		clock		: IN STD_LOGIC;
+		q		: OUT STD_LOGIC_VECTOR (15 DOWNTO 0)
+	);
+END Component;
 
 Component segment_nombre_hexa IS
 PORT(
@@ -94,8 +97,11 @@ signal instUnit: integer;
 signal instDiz: integer;
 signal addPrint: std_logic_vector(0 TO 15);
 signal manual: std_logic;
-signal memoryResult: std_logic_vector(0 TO 15);
+signal memoryResult: std_logic_vector(15 DOWNTO 0);
+signal memoryResultInvers: std_logic_vector(0 TO 15);
 signal R0, R1, R2, R3: std_logic_vector(0 TO 15);
+signal s_addr_count : std_LOGIC_VECTOR(0 TO 4);
+signal s_addr_memory : std_logic_vector(4 DOWNTO 0);
 	
 BEGIN
 	debounc0 : debouncer PORT MAP (KEY(0), CLOCK_50, so);
@@ -104,9 +110,13 @@ BEGIN
 	nsoR <= not soR;
 	proc0: Proc port map(Clock=>nso, Run=>SW(17), Reset=>soR, DIN=>DIN, Done=>Done, Overflow=>LEDG(7), B=>B, State=>State, OPPrint=>OPPrint, whichWrite=>whichWrite, 
 				addPrint=>addPrint, R0=>R0, R1=>R1, R2=>R2, R3=>R3);
+	
+	--Notre compteur
+	counter0 : Counter port map(Clock=>Done, Reset=> nsoR, addr=> s_addr_count, instructionState => instructionStates);
 				
 	--Notre mémoire
-	memory_test0 : Memory_Test port map(Done=>Done, Reset=>nsoR, result=>memoryResult, instructionStates=>instructionStates);
+	memory_rom : rom port map(address=>s_addr_memory, clock=>Done, q=>memoryResult);
+	--memory_test0 : Memory_Test port map(Done=>Done, Reset=>nsoR, result=>memoryResult, instructionStates=>instructionStates);
 	
 	--Mémoire auto :
 	--memory0: Memory port map(clk_clk=>Done, reset_reset=>soR, sortie_readdata=>memoryResult);
@@ -114,7 +124,7 @@ BEGIN
 	manual <= SW(16);
 	
 	with manual select
-		DIN <= 	memoryResult when '0',
+		DIN <= 	memoryResultInvers when '0',
 					SW(0 TO 15) when '1';
 	
 	
@@ -148,6 +158,26 @@ BEGIN
 	--seg1: segment_nombre_hexa port map(C=>R1(12 TO 15), O=>HEX2);
 	--seg2: segment_nombre_hexa port map(C=>R2(8 TO 11), O=>HEX1);
 	--seg3: segment_nombre_hexa port map(C=>R2(12 TO 15), O=>HEX0);
+	
+	countFor : for i in 0 TO 4 generate
+		s_addr_memory(i) <= s_addr_count(4-i);
+	end generate;
+	
+	memoryFor : for j in 0 TO 15 generate
+		memoryResultInvers(j) <= memoryResult(15-j);
+	end generate;
+	
+	--Affichage addresse
+	--seg0: segment_nombre_hexa port map(C=>s_addr(1 TO 4), O=>HEX0);
+	--seg1: segment_nombre_hexa port map(C=>("000" & s_addr(0)), O=>HEX1);
+	--seg2: segment_nombre_hexa port map(C=>"0000", O=>HEX2);
+	--seg3: segment_nombre_hexa port map(C=>"0000", O=>HEX3);
+	
+	--Affichage sortie
+	--seg0: segment_nombre_hexa port map(C=>memoryResult2(0 TO 3), O=>HEX3);
+	--seg1: segment_nombre_hexa port map(C=>memoryResult2(4 TO 7), O=>HEX2);
+	--seg2: segment_nombre_hexa port map(C=>memoryResult2(8 TO 11), O=>HEX1);
+	--seg3: segment_nombre_hexa port map(C=>memoryResult2(12 TO 15), O=>HEX0);
 	
 	-- Affichage OP
 	op <= '0' & OPPrint;

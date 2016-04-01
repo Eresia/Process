@@ -24,12 +24,23 @@ PORT(
 END Component;
 
 Signal Cs: Integer;
-Signal Ns: Integer;
+Signal Ns, Ts: Integer;
 Signal Rx: std_logic_vector(0 To 7);
 Signal DemI: std_logic_vector(0 TO 2);
 Signal DemO: std_logic_vector(0 TO 7);
 BEGIN
 	demux0: Demux port map(I=>DemI, O=>DemO);
+	
+	with op(0 TO 2) select
+		Ts <= 	3 when "000",
+					4 when "001",
+					6 when "010",
+					9 when "011",
+					11 when "100",
+					13 when "101",
+					15 when "110",
+					0 when OTHERS;
+	
 	NSL: PROCESS(Cs, OP, Run)
 	BEGIN
 		if run='1' then
@@ -39,15 +50,7 @@ BEGIN
 				when 1 =>
 					Ns <= 2;
 				when 2 =>
-					if op(0 TO 2) = "000" then
-						Ns <= 3;
-					elsif op(0 TO 2) = "001" then
-						Ns <= 4;
-					elsif op(0 TO 2) = "010" then
-						Ns <= 6;
-					elsif op(0 TO 2) = "011" then
-						Ns <= 9;
-					end if;
+					Ns <= Ts;
 				when 3 =>
 					Ns <= 1;
 				when 4 =>
@@ -63,7 +66,17 @@ BEGIN
 				when 9 =>
 					Ns <= 10;
 				when 10 =>
-					NS <= 8;
+					Ns <= 8;
+				when 11 =>
+					Ns <= 12;
+				when 12 =>
+					Ns <= 8;
+				when 13 =>
+					Ns <= 14;
+				when 14 =>
+					Ns <= 8;
+				when 15 =>
+					Ns <= 8;
 				when OTHERS => NULL;
 			end case;
 		end if;
@@ -107,6 +120,24 @@ BEGIN
 					Sel(2 TO 4) <= OP(6 TO 8);
 					Set(2) <= '1';
 					Set(3 TO 5) <= "000";
+				when 11 =>
+					Sel(2 TO 4) <= OP(3 TO 5);
+					Set(1) <= '1';
+				when 12 =>
+					Sel(2 TO 4) <= OP(6 TO 8);
+					Set(2) <= '1';
+					Set(3 TO 5) <= "010";
+				when 13 =>
+					Sel(2 TO 4) <= OP(3 TO 5);
+					Set(1) <= '1';
+				when 14 =>
+					Sel(2 TO 4) <= OP(6 TO 8);
+					Set(2) <= '1';
+					Set(3 TO 5) <= "011";
+				when 15 =>
+					Sel(2 TO 4) <= OP(3 TO 5);
+					Set(2) <= '1';
+					Set(3 TO 5) <= "100";
 				when OTHERS => NULL;
 			end case;
 		end if;

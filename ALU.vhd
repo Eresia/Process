@@ -34,7 +34,7 @@ END Component;
 Component Mux_ALU IS
 	GENERIC(SIZE : positive := 16);
 	PORT(
-		A,B : IN std_logic_vector(0 TO SIZE-1);
+		A,B,C,D,E,F,G,H : IN std_logic_vector(0 TO SIZE-1) := (others => '0');
 		Sel: IN std_logic_vector(0 TO 2);
 		O : OUT std_logic_vector(0 TO SIZE-1)
 	);
@@ -49,7 +49,7 @@ signal Csub : std_logic_vector(0 TO 0);
 BEGIN
 	add0: Full_Adder_Gen generic map(32) port map(A=>A, B=>B, Cin=>'0', S=>Sadd, Cout=>Cadd(0));
 	sub0: Full_Sub_Gen generic map(32) port map(A=>A, B=>B, Cin=>'0', S=>Ssub, Cout=>Csub(0));
-	mux0: Mux_ALU generic map(16) port map(A=>Ssub, B=>Sadd, Sel=>Operation, O=>S);
-	mux1: Mux_ALU generic map(1) port map(A=>Csub, B=>Cadd, Sel=>Operation, O=>CMux);
+	mux0: Mux_ALU generic map(16) port map(A=>Ssub, B=>Sadd, C=>(A and B), D=>(A or B), E=>(not B), Sel=>Operation, O=>S);
+	mux1: Mux_ALU generic map(1) port map(A=>Csub, B=>Cadd, C=>"0", D=>"0", E=>"0", Sel=>Operation, O=>CMux);
 	Overflow <= CMux(0);
 END Behavior;
