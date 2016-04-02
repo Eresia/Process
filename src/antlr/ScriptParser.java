@@ -19,8 +19,8 @@ public class ScriptParser extends Parser {
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
 	public static final int
-		Equals=1, Or=2, And=3, Not=4, Add=5, Sub=6, Variable=7, Int=8, Comment=9, 
-		WS=10;
+		Equals=1, Or=2, And=3, Not=4, Add=5, Sub=6, Variable=7, Int=8, Hexa=9, 
+		Comment=10, WS=11;
 	public static final int
 		RULE_parse = 0, RULE_block = 1, RULE_line = 2, RULE_assignVar = 3, RULE_notExpression = 4, 
 		RULE_operation = 5;
@@ -32,8 +32,8 @@ public class ScriptParser extends Parser {
 		null, "'='", "'|'", "'&'", "'!'", "'+'", "'-'"
 	};
 	private static final String[] _SYMBOLIC_NAMES = {
-		null, "Equals", "Or", "And", "Not", "Add", "Sub", "Variable", "Int", "Comment", 
-		"WS"
+		null, "Equals", "Or", "And", "Not", "Add", "Sub", "Variable", "Int", "Hexa", 
+		"Comment", "WS"
 	};
 	public static final Vocabulary VOCABULARY = new VocabularyImpl(_LITERAL_NAMES, _SYMBOLIC_NAMES);
 
@@ -294,6 +294,7 @@ public class ScriptParser extends Parser {
 		}
 		public TerminalNode Equals() { return getToken(ScriptParser.Equals, 0); }
 		public TerminalNode Int() { return getToken(ScriptParser.Int, 0); }
+		public TerminalNode Hexa() { return getToken(ScriptParser.Hexa, 0); }
 		public AssignVarContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -326,7 +327,7 @@ public class ScriptParser extends Parser {
 			match(Equals);
 			setState(32);
 			_la = _input.LA(1);
-			if ( !(_la==Variable || _la==Int) ) {
+			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << Variable) | (1L << Int) | (1L << Hexa))) != 0)) ) {
 			_errHandler.recoverInline(this);
 			} else {
 				consume();
@@ -482,21 +483,21 @@ public class ScriptParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3\f\66\4\2\t\2\4\3"+
+		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3\r\66\4\2\t\2\4\3"+
 		"\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\3\2\3\2\3\2\3\3\3\3\5\3\24\n\3\7"+
 		"\3\26\n\3\f\3\16\3\31\13\3\3\4\3\4\3\4\3\4\5\4\37\n\4\3\5\3\5\3\5\3\5"+
 		"\3\6\3\6\3\6\3\7\3\7\3\7\3\7\3\7\3\7\3\7\3\7\3\7\3\7\3\7\3\7\5\7\64\n"+
-		"\7\3\7\2\2\b\2\4\6\b\n\f\2\3\3\2\t\n\67\2\16\3\2\2\2\4\27\3\2\2\2\6\36"+
+		"\7\3\7\2\2\b\2\4\6\b\n\f\2\3\3\2\t\13\67\2\16\3\2\2\2\4\27\3\2\2\2\6\36"+
 		"\3\2\2\2\b \3\2\2\2\n$\3\2\2\2\f\63\3\2\2\2\16\17\5\4\3\2\17\20\7\2\2"+
-		"\3\20\3\3\2\2\2\21\23\5\6\4\2\22\24\7\13\2\2\23\22\3\2\2\2\23\24\3\2\2"+
+		"\3\20\3\3\2\2\2\21\23\5\6\4\2\22\24\7\f\2\2\23\22\3\2\2\2\23\24\3\2\2"+
 		"\2\24\26\3\2\2\2\25\21\3\2\2\2\26\31\3\2\2\2\27\25\3\2\2\2\27\30\3\2\2"+
 		"\2\30\5\3\2\2\2\31\27\3\2\2\2\32\37\5\b\5\2\33\37\5\n\6\2\34\37\5\f\7"+
-		"\2\35\37\7\13\2\2\36\32\3\2\2\2\36\33\3\2\2\2\36\34\3\2\2\2\36\35\3\2"+
-		"\2\2\37\7\3\2\2\2 !\7\t\2\2!\"\7\3\2\2\"#\t\2\2\2#\t\3\2\2\2$%\7\6\2\2"+
-		"%&\7\t\2\2&\13\3\2\2\2\'(\7\t\2\2()\7\7\2\2)\64\7\t\2\2*+\7\t\2\2+,\7"+
-		"\b\2\2,\64\7\t\2\2-.\7\t\2\2./\7\5\2\2/\64\7\t\2\2\60\61\7\t\2\2\61\62"+
-		"\7\4\2\2\62\64\7\t\2\2\63\'\3\2\2\2\63*\3\2\2\2\63-\3\2\2\2\63\60\3\2"+
-		"\2\2\64\r\3\2\2\2\6\23\27\36\63";
+		"\2\35\37\7\f\2\2\36\32\3\2\2\2\36\33\3\2\2\2\36\34\3\2\2\2\36\35\3\2\2"+
+		"\2\37\7\3\2\2\2 !\7\t\2\2!\"\7\3\2\2\"#\t\2\2\2#\t\3\2\2\2$%\7\6\2\2%"+
+		"&\7\t\2\2&\13\3\2\2\2\'(\7\t\2\2()\7\7\2\2)\64\7\t\2\2*+\7\t\2\2+,\7\b"+
+		"\2\2,\64\7\t\2\2-.\7\t\2\2./\7\5\2\2/\64\7\t\2\2\60\61\7\t\2\2\61\62\7"+
+		"\4\2\2\62\64\7\t\2\2\63\'\3\2\2\2\63*\3\2\2\2\63-\3\2\2\2\63\60\3\2\2"+
+		"\2\64\r\3\2\2\2\6\23\27\36\63";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

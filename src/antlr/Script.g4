@@ -48,7 +48,7 @@ Variable
 ;
 
 Int		: [0-9]+;
-Hexa	: '(' (Int | [a-z] | [A-Z])+ ')'
+Hexa	: '(' (Int | [a-z] | [A-Z])+ ')';
 
 Comment
  : ('//' ~[\r\n]* | '/*' .*? '*/') -> skip
