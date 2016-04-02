@@ -34,7 +34,7 @@ operation
  | Variable Or Variable
  ;
 
-hexaDisp	: ( Hexa );
+hexaDisp	: HexaOpen Hexa HexaClose;
 integerDisp	: Int;
 
 Equals		: '=' ;
@@ -52,6 +52,9 @@ Variable
 
 Int		: [0-9]+;
 Hexa	: [a-zA-Z_0-9]+;
+
+HexaOpen	:	'(';
+HexaClose	:	')';
 
 Comment
  : ('//' ~[\r\n]* | '/*' .*? '*/') -> skip
