@@ -33,6 +33,8 @@ operation
  | Variable And Variable
  | Variable Or Variable
  ;
+ 
+hexa	: '(' ([0-9] | [a-z] | [A-Z])+ ')';
 
 Equals		: '=' ;
 
@@ -48,7 +50,6 @@ Variable
 ;
 
 Int		: [0-9]+;
-Hexa	: '(' (Int | [a-z] | [A-Z])+ ')';
 
 Comment
  : ('//' ~[\r\n]* | '/*' .*? '*/') -> skip
