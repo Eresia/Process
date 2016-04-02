@@ -15,6 +15,7 @@ block
 line
  : assignVar
  | expression
+ | operation
  | (Comment)
  ;
 
@@ -22,12 +23,15 @@ assignVar
  : Variable Equals (Variable | Int)
  ;
 
-expression
- : Not Variable					#notExpression
- | Variable Add Variable				#addExpression
- | Variable Sub Variable				#subExpression
- | Variable And Variable				#andExpression
- | Variable Or Variable				#orExpression
+notExpression
+ : Not Variable	
+ ;
+ 
+operation
+ : Variable Add Variable
+ | Variable Sub Variable
+ | Variable And Variable
+ | Variable Or Variable
  ;
 
 Equals		: '=' ;
