@@ -20,7 +20,7 @@ line
  ;
 
 assignVar
- : Variable Equals (Variable | Int)
+ : Variable Equals (Variable | Int | Hexa)
  ;
 
 notExpression
@@ -48,6 +48,7 @@ Variable
 ;
 
 Int		: [0-9]+;
+Hexa	: '(' (Int | [a-z] | [A-Z])+ ')'
 
 Comment
  : ('//' ~[\r\n]* | '/*' .*? '*/') -> skip
