@@ -23,11 +23,11 @@ assignVar
  ;
 
 expression
- : Not Int					#notExpression
- | Int Add Int				#addExpression
- | Int Sub Int				#subExpression
- | Int And Int				#andExpression
- | Int Or Int				#orExpression
+ : Not Variable					#notExpression
+ | Variable Add Variable				#addExpression
+ | Variable Sub Variable				#subExpression
+ | Variable And Variable				#andExpression
+ | Variable Or Variable				#orExpression
  ;
 
 Equals		: '=' ;
