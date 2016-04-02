@@ -14,7 +14,7 @@ block
 
 line
  : assignVar
- | expression
+ | notExpression
  | operation
  | (Comment)
  ;
@@ -24,9 +24,9 @@ assignVar
  ;
 
 notExpression
- : Not Variable	
+ : Not Variable
  ;
- 
+
 operation
  : Variable Add Variable
  | Variable Sub Variable

@@ -37,38 +37,15 @@ public interface ScriptVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitAssignVar(ScriptParser.AssignVarContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code notExpression}
-	 * labeled alternative in {@link ScriptParser#expression}.
+	 * Visit a parse tree produced by {@link ScriptParser#notExpression}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitNotExpression(ScriptParser.NotExpressionContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code addExpression}
-	 * labeled alternative in {@link ScriptParser#expression}.
+	 * Visit a parse tree produced by {@link ScriptParser#operation}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitAddExpression(ScriptParser.AddExpressionContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code subExpression}
-	 * labeled alternative in {@link ScriptParser#expression}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitSubExpression(ScriptParser.SubExpressionContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code andExpression}
-	 * labeled alternative in {@link ScriptParser#expression}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitAndExpression(ScriptParser.AndExpressionContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code orExpression}
-	 * labeled alternative in {@link ScriptParser#expression}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitOrExpression(ScriptParser.OrExpressionContext ctx);
+	T visitOperation(ScriptParser.OperationContext ctx);
 }

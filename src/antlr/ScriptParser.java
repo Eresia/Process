@@ -22,9 +22,10 @@ public class ScriptParser extends Parser {
 		Equals=1, Or=2, And=3, Not=4, Add=5, Sub=6, Variable=7, Int=8, Comment=9, 
 		WS=10;
 	public static final int
-		RULE_parse = 0, RULE_block = 1, RULE_line = 2, RULE_assignVar = 3, RULE_expression = 4;
+		RULE_parse = 0, RULE_block = 1, RULE_line = 2, RULE_assignVar = 3, RULE_notExpression = 4, 
+		RULE_operation = 5;
 	public static final String[] ruleNames = {
-		"parse", "block", "line", "assignVar", "expression"
+		"parse", "block", "line", "assignVar", "notExpression", "operation"
 	};
 
 	private static final String[] _LITERAL_NAMES = {
@@ -114,10 +115,10 @@ public class ScriptParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			{
-			setState(10);
+			setState(12);
 			block();
 			}
-			setState(11);
+			setState(13);
 			match(EOF);
 			}
 		}
@@ -169,27 +170,27 @@ public class ScriptParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(19);
+			setState(21);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << Not) | (1L << Variable) | (1L << Comment))) != 0)) {
 				{
 				{
-				setState(13);
-				line();
 				setState(15);
+				line();
+				setState(17);
 				_errHandler.sync(this);
 				switch ( getInterpreter().adaptivePredict(_input,0,_ctx) ) {
 				case 1:
 					{
-					setState(14);
+					setState(16);
 					match(Comment);
 					}
 					break;
 				}
 				}
 				}
-				setState(21);
+				setState(23);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
@@ -210,8 +211,11 @@ public class ScriptParser extends Parser {
 		public AssignVarContext assignVar() {
 			return getRuleContext(AssignVarContext.class,0);
 		}
-		public ExpressionContext expression() {
-			return getRuleContext(ExpressionContext.class,0);
+		public NotExpressionContext notExpression() {
+			return getRuleContext(NotExpressionContext.class,0);
+		}
+		public OperationContext operation() {
+			return getRuleContext(OperationContext.class,0);
 		}
 		public TerminalNode Comment() { return getToken(ScriptParser.Comment, 0); }
 		public LineContext(ParserRuleContext parent, int invokingState) {
@@ -237,28 +241,35 @@ public class ScriptParser extends Parser {
 		LineContext _localctx = new LineContext(_ctx, getState());
 		enterRule(_localctx, 4, RULE_line);
 		try {
-			setState(25);
+			setState(28);
 			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,2,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(22);
+				setState(24);
 				assignVar();
 				}
 				break;
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(23);
-				expression();
+				setState(25);
+				notExpression();
 				}
 				break;
 			case 3:
 				enterOuterAlt(_localctx, 3);
 				{
+				setState(26);
+				operation();
+				}
+				break;
+			case 4:
+				enterOuterAlt(_localctx, 4);
 				{
-				setState(24);
+				{
+				setState(27);
 				match(Comment);
 				}
 				}
@@ -309,11 +320,11 @@ public class ScriptParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(27);
+			setState(30);
 			match(Variable);
-			setState(28);
+			setState(31);
 			match(Equals);
-			setState(29);
+			setState(32);
 			_la = _input.LA(1);
 			if ( !(_la==Variable || _la==Int) ) {
 			_errHandler.recoverInline(this);
@@ -333,84 +344,13 @@ public class ScriptParser extends Parser {
 		return _localctx;
 	}
 
-	public static class ExpressionContext extends ParserRuleContext {
-		public ExpressionContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_expression; }
-	 
-		public ExpressionContext() { }
-		public void copyFrom(ExpressionContext ctx) {
-			super.copyFrom(ctx);
-		}
-	}
-	public static class OrExpressionContext extends ExpressionContext {
-		public List<TerminalNode> Variable() { return getTokens(ScriptParser.Variable); }
-		public TerminalNode Variable(int i) {
-			return getToken(ScriptParser.Variable, i);
-		}
-		public TerminalNode Or() { return getToken(ScriptParser.Or, 0); }
-		public OrExpressionContext(ExpressionContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ScriptListener ) ((ScriptListener)listener).enterOrExpression(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ScriptListener ) ((ScriptListener)listener).exitOrExpression(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof ScriptVisitor ) return ((ScriptVisitor<? extends T>)visitor).visitOrExpression(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-	public static class AndExpressionContext extends ExpressionContext {
-		public List<TerminalNode> Variable() { return getTokens(ScriptParser.Variable); }
-		public TerminalNode Variable(int i) {
-			return getToken(ScriptParser.Variable, i);
-		}
-		public TerminalNode And() { return getToken(ScriptParser.And, 0); }
-		public AndExpressionContext(ExpressionContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ScriptListener ) ((ScriptListener)listener).enterAndExpression(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ScriptListener ) ((ScriptListener)listener).exitAndExpression(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof ScriptVisitor ) return ((ScriptVisitor<? extends T>)visitor).visitAndExpression(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-	public static class AddExpressionContext extends ExpressionContext {
-		public List<TerminalNode> Variable() { return getTokens(ScriptParser.Variable); }
-		public TerminalNode Variable(int i) {
-			return getToken(ScriptParser.Variable, i);
-		}
-		public TerminalNode Add() { return getToken(ScriptParser.Add, 0); }
-		public AddExpressionContext(ExpressionContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ScriptListener ) ((ScriptListener)listener).enterAddExpression(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ScriptListener ) ((ScriptListener)listener).exitAddExpression(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof ScriptVisitor ) return ((ScriptVisitor<? extends T>)visitor).visitAddExpression(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-	public static class NotExpressionContext extends ExpressionContext {
+	public static class NotExpressionContext extends ParserRuleContext {
 		public TerminalNode Not() { return getToken(ScriptParser.Not, 0); }
 		public TerminalNode Variable() { return getToken(ScriptParser.Variable, 0); }
-		public NotExpressionContext(ExpressionContext ctx) { copyFrom(ctx); }
+		public NotExpressionContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_notExpression; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof ScriptListener ) ((ScriptListener)listener).enterNotExpression(this);
@@ -425,90 +365,106 @@ public class ScriptParser extends Parser {
 			else return visitor.visitChildren(this);
 		}
 	}
-	public static class SubExpressionContext extends ExpressionContext {
+
+	public final NotExpressionContext notExpression() throws RecognitionException {
+		NotExpressionContext _localctx = new NotExpressionContext(_ctx, getState());
+		enterRule(_localctx, 8, RULE_notExpression);
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(34);
+			match(Not);
+			setState(35);
+			match(Variable);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	public static class OperationContext extends ParserRuleContext {
 		public List<TerminalNode> Variable() { return getTokens(ScriptParser.Variable); }
 		public TerminalNode Variable(int i) {
 			return getToken(ScriptParser.Variable, i);
 		}
+		public TerminalNode Add() { return getToken(ScriptParser.Add, 0); }
 		public TerminalNode Sub() { return getToken(ScriptParser.Sub, 0); }
-		public SubExpressionContext(ExpressionContext ctx) { copyFrom(ctx); }
+		public TerminalNode And() { return getToken(ScriptParser.And, 0); }
+		public TerminalNode Or() { return getToken(ScriptParser.Or, 0); }
+		public OperationContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_operation; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ScriptListener ) ((ScriptListener)listener).enterSubExpression(this);
+			if ( listener instanceof ScriptListener ) ((ScriptListener)listener).enterOperation(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ScriptListener ) ((ScriptListener)listener).exitSubExpression(this);
+			if ( listener instanceof ScriptListener ) ((ScriptListener)listener).exitOperation(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof ScriptVisitor ) return ((ScriptVisitor<? extends T>)visitor).visitSubExpression(this);
+			if ( visitor instanceof ScriptVisitor ) return ((ScriptVisitor<? extends T>)visitor).visitOperation(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 
-	public final ExpressionContext expression() throws RecognitionException {
-		ExpressionContext _localctx = new ExpressionContext(_ctx, getState());
-		enterRule(_localctx, 8, RULE_expression);
+	public final OperationContext operation() throws RecognitionException {
+		OperationContext _localctx = new OperationContext(_ctx, getState());
+		enterRule(_localctx, 10, RULE_operation);
 		try {
-			setState(45);
+			setState(49);
 			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,3,_ctx) ) {
 			case 1:
-				_localctx = new NotExpressionContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(31);
-				match(Not);
-				setState(32);
+				setState(37);
+				match(Variable);
+				setState(38);
+				match(Add);
+				setState(39);
 				match(Variable);
 				}
 				break;
 			case 2:
-				_localctx = new AddExpressionContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(33);
+				setState(40);
 				match(Variable);
-				setState(34);
-				match(Add);
-				setState(35);
+				setState(41);
+				match(Sub);
+				setState(42);
 				match(Variable);
 				}
 				break;
 			case 3:
-				_localctx = new SubExpressionContext(_localctx);
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(36);
+				setState(43);
 				match(Variable);
-				setState(37);
-				match(Sub);
-				setState(38);
+				setState(44);
+				match(And);
+				setState(45);
 				match(Variable);
 				}
 				break;
 			case 4:
-				_localctx = new AndExpressionContext(_localctx);
 				enterOuterAlt(_localctx, 4);
 				{
-				setState(39);
+				setState(46);
 				match(Variable);
-				setState(40);
-				match(And);
-				setState(41);
-				match(Variable);
-				}
-				break;
-			case 5:
-				_localctx = new OrExpressionContext(_localctx);
-				enterOuterAlt(_localctx, 5);
-				{
-				setState(42);
-				match(Variable);
-				setState(43);
+				setState(47);
 				match(Or);
-				setState(44);
+				setState(48);
 				match(Variable);
 				}
 				break;
@@ -526,20 +482,21 @@ public class ScriptParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3\f\62\4\2\t\2\4\3"+
-		"\t\3\4\4\t\4\4\5\t\5\4\6\t\6\3\2\3\2\3\2\3\3\3\3\5\3\22\n\3\7\3\24\n\3"+
-		"\f\3\16\3\27\13\3\3\4\3\4\3\4\5\4\34\n\4\3\5\3\5\3\5\3\5\3\6\3\6\3\6\3"+
-		"\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\5\6\60\n\6\3\6\2\2\7\2\4\6"+
-		"\b\n\2\3\3\2\t\n\64\2\f\3\2\2\2\4\25\3\2\2\2\6\33\3\2\2\2\b\35\3\2\2\2"+
-		"\n/\3\2\2\2\f\r\5\4\3\2\r\16\7\2\2\3\16\3\3\2\2\2\17\21\5\6\4\2\20\22"+
-		"\7\13\2\2\21\20\3\2\2\2\21\22\3\2\2\2\22\24\3\2\2\2\23\17\3\2\2\2\24\27"+
-		"\3\2\2\2\25\23\3\2\2\2\25\26\3\2\2\2\26\5\3\2\2\2\27\25\3\2\2\2\30\34"+
-		"\5\b\5\2\31\34\5\n\6\2\32\34\7\13\2\2\33\30\3\2\2\2\33\31\3\2\2\2\33\32"+
-		"\3\2\2\2\34\7\3\2\2\2\35\36\7\t\2\2\36\37\7\3\2\2\37 \t\2\2\2 \t\3\2\2"+
-		"\2!\"\7\6\2\2\"\60\7\t\2\2#$\7\t\2\2$%\7\7\2\2%\60\7\t\2\2&\'\7\t\2\2"+
-		"\'(\7\b\2\2(\60\7\t\2\2)*\7\t\2\2*+\7\5\2\2+\60\7\t\2\2,-\7\t\2\2-.\7"+
-		"\4\2\2.\60\7\t\2\2/!\3\2\2\2/#\3\2\2\2/&\3\2\2\2/)\3\2\2\2/,\3\2\2\2\60"+
-		"\13\3\2\2\2\6\21\25\33/";
+		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3\f\66\4\2\t\2\4\3"+
+		"\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\3\2\3\2\3\2\3\3\3\3\5\3\24\n\3\7"+
+		"\3\26\n\3\f\3\16\3\31\13\3\3\4\3\4\3\4\3\4\5\4\37\n\4\3\5\3\5\3\5\3\5"+
+		"\3\6\3\6\3\6\3\7\3\7\3\7\3\7\3\7\3\7\3\7\3\7\3\7\3\7\3\7\3\7\5\7\64\n"+
+		"\7\3\7\2\2\b\2\4\6\b\n\f\2\3\3\2\t\n\67\2\16\3\2\2\2\4\27\3\2\2\2\6\36"+
+		"\3\2\2\2\b \3\2\2\2\n$\3\2\2\2\f\63\3\2\2\2\16\17\5\4\3\2\17\20\7\2\2"+
+		"\3\20\3\3\2\2\2\21\23\5\6\4\2\22\24\7\13\2\2\23\22\3\2\2\2\23\24\3\2\2"+
+		"\2\24\26\3\2\2\2\25\21\3\2\2\2\26\31\3\2\2\2\27\25\3\2\2\2\27\30\3\2\2"+
+		"\2\30\5\3\2\2\2\31\27\3\2\2\2\32\37\5\b\5\2\33\37\5\n\6\2\34\37\5\f\7"+
+		"\2\35\37\7\13\2\2\36\32\3\2\2\2\36\33\3\2\2\2\36\34\3\2\2\2\36\35\3\2"+
+		"\2\2\37\7\3\2\2\2 !\7\t\2\2!\"\7\3\2\2\"#\t\2\2\2#\t\3\2\2\2$%\7\6\2\2"+
+		"%&\7\t\2\2&\13\3\2\2\2\'(\7\t\2\2()\7\7\2\2)\64\7\t\2\2*+\7\t\2\2+,\7"+
+		"\b\2\2,\64\7\t\2\2-.\7\t\2\2./\7\5\2\2/\64\7\t\2\2\60\61\7\t\2\2\61\62"+
+		"\7\4\2\2\62\64\7\t\2\2\63\'\3\2\2\2\63*\3\2\2\2\63-\3\2\2\2\63\60\3\2"+
+		"\2\2\64\r\3\2\2\2\6\23\27\36\63";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

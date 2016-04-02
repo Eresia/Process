@@ -50,63 +50,23 @@ public interface ScriptListener extends ParseTreeListener {
 	 */
 	void exitAssignVar(ScriptParser.AssignVarContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code notExpression}
-	 * labeled alternative in {@link ScriptParser#expression}.
+	 * Enter a parse tree produced by {@link ScriptParser#notExpression}.
 	 * @param ctx the parse tree
 	 */
 	void enterNotExpression(ScriptParser.NotExpressionContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code notExpression}
-	 * labeled alternative in {@link ScriptParser#expression}.
+	 * Exit a parse tree produced by {@link ScriptParser#notExpression}.
 	 * @param ctx the parse tree
 	 */
 	void exitNotExpression(ScriptParser.NotExpressionContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code addExpression}
-	 * labeled alternative in {@link ScriptParser#expression}.
+	 * Enter a parse tree produced by {@link ScriptParser#operation}.
 	 * @param ctx the parse tree
 	 */
-	void enterAddExpression(ScriptParser.AddExpressionContext ctx);
+	void enterOperation(ScriptParser.OperationContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code addExpression}
-	 * labeled alternative in {@link ScriptParser#expression}.
+	 * Exit a parse tree produced by {@link ScriptParser#operation}.
 	 * @param ctx the parse tree
 	 */
-	void exitAddExpression(ScriptParser.AddExpressionContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code subExpression}
-	 * labeled alternative in {@link ScriptParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterSubExpression(ScriptParser.SubExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code subExpression}
-	 * labeled alternative in {@link ScriptParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitSubExpression(ScriptParser.SubExpressionContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code andExpression}
-	 * labeled alternative in {@link ScriptParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterAndExpression(ScriptParser.AndExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code andExpression}
-	 * labeled alternative in {@link ScriptParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitAndExpression(ScriptParser.AndExpressionContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code orExpression}
-	 * labeled alternative in {@link ScriptParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterOrExpression(ScriptParser.OrExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code orExpression}
-	 * labeled alternative in {@link ScriptParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitOrExpression(ScriptParser.OrExpressionContext ctx);
+	void exitOperation(ScriptParser.OperationContext ctx);
 }
