@@ -51,7 +51,7 @@ Variable
 ;
 
 Int		: [0-9]+;
-Hexa	: [a-zA-Z_0-9]+;
+Hexa	: ([a-z] | [A-Z] | [0-9])+;
 
 HexaOpen	:	'(';
 HexaClose	:	')';
