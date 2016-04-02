@@ -85,6 +85,30 @@ public class ScriptBaseListener implements ScriptListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitOperation(ScriptParser.OperationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterHexaDisp(ScriptParser.HexaDispContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitHexaDisp(ScriptParser.HexaDispContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterIntegerDisp(ScriptParser.IntegerDispContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitIntegerDisp(ScriptParser.IntegerDispContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

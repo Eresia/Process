@@ -20,7 +20,7 @@ line
  ;
 
 assignVar
- : Variable Equals (Variable | Int | Hexa)
+ : Variable Equals (Variable | Int | hexaDisp)
  ;
 
 notExpression
@@ -33,8 +33,9 @@ operation
  | Variable And Variable
  | Variable Or Variable
  ;
- 
-hexa	: '(' ([0-9] | [a-z] | [A-Z])+ ')';
+
+hexaDisp	: ( Hexa );
+integerDisp	: Int;
 
 Equals		: '=' ;
 
@@ -50,6 +51,7 @@ Variable
 ;
 
 Int		: [0-9]+;
+Hexa	: [a-zA-Z_0-9]+;
 
 Comment
  : ('//' ~[\r\n]* | '/*' .*? '*/') -> skip

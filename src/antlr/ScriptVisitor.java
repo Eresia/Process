@@ -48,4 +48,16 @@ public interface ScriptVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitOperation(ScriptParser.OperationContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link ScriptParser#hexaDisp}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitHexaDisp(ScriptParser.HexaDispContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link ScriptParser#integerDisp}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitIntegerDisp(ScriptParser.IntegerDispContext ctx);
 }

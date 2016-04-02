@@ -69,4 +69,24 @@ public interface ScriptListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitOperation(ScriptParser.OperationContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link ScriptParser#hexaDisp}.
+	 * @param ctx the parse tree
+	 */
+	void enterHexaDisp(ScriptParser.HexaDispContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link ScriptParser#hexaDisp}.
+	 * @param ctx the parse tree
+	 */
+	void exitHexaDisp(ScriptParser.HexaDispContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link ScriptParser#integerDisp}.
+	 * @param ctx the parse tree
+	 */
+	void enterIntegerDisp(ScriptParser.IntegerDispContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link ScriptParser#integerDisp}.
+	 * @param ctx the parse tree
+	 */
+	void exitIntegerDisp(ScriptParser.IntegerDispContext ctx);
 }
