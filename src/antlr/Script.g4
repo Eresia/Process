@@ -19,7 +19,7 @@ line
  ;
 
 assignVar
- : Variable Equals Int
+ : Variable Equals (Variable | Int)
  ;
 
 expression

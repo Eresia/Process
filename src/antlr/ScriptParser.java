@@ -277,7 +277,10 @@ public class ScriptParser extends Parser {
 	}
 
 	public static class AssignVarContext extends ParserRuleContext {
-		public TerminalNode Variable() { return getToken(ScriptParser.Variable, 0); }
+		public List<TerminalNode> Variable() { return getTokens(ScriptParser.Variable); }
+		public TerminalNode Variable(int i) {
+			return getToken(ScriptParser.Variable, i);
+		}
 		public TerminalNode Equals() { return getToken(ScriptParser.Equals, 0); }
 		public TerminalNode Int() { return getToken(ScriptParser.Int, 0); }
 		public AssignVarContext(ParserRuleContext parent, int invokingState) {
@@ -302,6 +305,7 @@ public class ScriptParser extends Parser {
 	public final AssignVarContext assignVar() throws RecognitionException {
 		AssignVarContext _localctx = new AssignVarContext(_ctx, getState());
 		enterRule(_localctx, 6, RULE_assignVar);
+		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
@@ -310,7 +314,12 @@ public class ScriptParser extends Parser {
 			setState(28);
 			match(Equals);
 			setState(29);
-			match(Int);
+			_la = _input.LA(1);
+			if ( !(_la==Variable || _la==Int) ) {
+			_errHandler.recoverInline(this);
+			} else {
+				consume();
+			}
 			}
 		}
 		catch (RecognitionException re) {
@@ -521,16 +530,16 @@ public class ScriptParser extends Parser {
 		"\t\3\4\4\t\4\4\5\t\5\4\6\t\6\3\2\3\2\3\2\3\3\3\3\5\3\22\n\3\7\3\24\n\3"+
 		"\f\3\16\3\27\13\3\3\4\3\4\3\4\5\4\34\n\4\3\5\3\5\3\5\3\5\3\6\3\6\3\6\3"+
 		"\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\5\6\60\n\6\3\6\2\2\7\2\4\6"+
-		"\b\n\2\2\64\2\f\3\2\2\2\4\25\3\2\2\2\6\33\3\2\2\2\b\35\3\2\2\2\n/\3\2"+
-		"\2\2\f\r\5\4\3\2\r\16\7\2\2\3\16\3\3\2\2\2\17\21\5\6\4\2\20\22\7\13\2"+
-		"\2\21\20\3\2\2\2\21\22\3\2\2\2\22\24\3\2\2\2\23\17\3\2\2\2\24\27\3\2\2"+
-		"\2\25\23\3\2\2\2\25\26\3\2\2\2\26\5\3\2\2\2\27\25\3\2\2\2\30\34\5\b\5"+
-		"\2\31\34\5\n\6\2\32\34\7\13\2\2\33\30\3\2\2\2\33\31\3\2\2\2\33\32\3\2"+
-		"\2\2\34\7\3\2\2\2\35\36\7\t\2\2\36\37\7\3\2\2\37 \7\n\2\2 \t\3\2\2\2!"+
-		"\"\7\6\2\2\"\60\7\t\2\2#$\7\t\2\2$%\7\7\2\2%\60\7\t\2\2&\'\7\t\2\2\'("+
-		"\7\b\2\2(\60\7\t\2\2)*\7\t\2\2*+\7\5\2\2+\60\7\t\2\2,-\7\t\2\2-.\7\4\2"+
-		"\2.\60\7\t\2\2/!\3\2\2\2/#\3\2\2\2/&\3\2\2\2/)\3\2\2\2/,\3\2\2\2\60\13"+
-		"\3\2\2\2\6\21\25\33/";
+		"\b\n\2\3\3\2\t\n\64\2\f\3\2\2\2\4\25\3\2\2\2\6\33\3\2\2\2\b\35\3\2\2\2"+
+		"\n/\3\2\2\2\f\r\5\4\3\2\r\16\7\2\2\3\16\3\3\2\2\2\17\21\5\6\4\2\20\22"+
+		"\7\13\2\2\21\20\3\2\2\2\21\22\3\2\2\2\22\24\3\2\2\2\23\17\3\2\2\2\24\27"+
+		"\3\2\2\2\25\23\3\2\2\2\25\26\3\2\2\2\26\5\3\2\2\2\27\25\3\2\2\2\30\34"+
+		"\5\b\5\2\31\34\5\n\6\2\32\34\7\13\2\2\33\30\3\2\2\2\33\31\3\2\2\2\33\32"+
+		"\3\2\2\2\34\7\3\2\2\2\35\36\7\t\2\2\36\37\7\3\2\2\37 \t\2\2\2 \t\3\2\2"+
+		"\2!\"\7\6\2\2\"\60\7\t\2\2#$\7\t\2\2$%\7\7\2\2%\60\7\t\2\2&\'\7\t\2\2"+
+		"\'(\7\b\2\2(\60\7\t\2\2)*\7\t\2\2*+\7\5\2\2+\60\7\t\2\2,-\7\t\2\2-.\7"+
+		"\4\2\2.\60\7\t\2\2/!\3\2\2\2/#\3\2\2\2/&\3\2\2\2/)\3\2\2\2/,\3\2\2\2\60"+
+		"\13\3\2\2\2\6\21\25\33/";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {
