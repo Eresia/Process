@@ -60,7 +60,7 @@ Int		: [0-9]+;
 
 HexaOpen	:	'0x';
 
-LabelId 	: ([a-f] | [A-F])+;
+LabelId 	: ([a-z] | [A-Z])+;
 
 Comment
  : ('//' ~[\r\n]* | '/*' .*? '*/') -> skip
