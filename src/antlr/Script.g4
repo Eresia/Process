@@ -13,10 +13,7 @@ block
  ;
 
 line
- : assignVar
- | notExpression
- | operation
- | (Comment)
+ : ((assignVar  | notExpression  | operation | gotoExpression | labelExpression)  EndLine) | Comment
  ;
 
 assignVar
@@ -37,6 +34,9 @@ operation
 hexaDisp	: Hexa;
 integerDisp	: Int;
 
+gotoExpression	: GotoBegin LabelId;
+labelExpression	: LabelBegin LabelId;
+
 Equals		: '=' ;
 
 Or			: '|' ;
@@ -46,14 +46,21 @@ Not			: '!' ;
 Add			: '+';
 Sub			: '-';
 
+EndLine		: ';';
+
+LabelBegin 	: ('l' | 'L') ('a' | 'A') ('b' | 'B') ('e' | 'E') ('l' | 'L');
+GotoBegin 	: ('g' | 'G') ('o' | 'O') ('t' | 'T') ('o' | 'O');
+
 Variable
-: 'R' [0-7]
+: ('R' | 'r') [0-7]
 ;
 
-Hexa	: HexaOpen ([a-z] | [A-Z] | [0-9])+;
+Hexa	: HexaOpen ([a-f] | [A-F] | [0-9])+;
 Int		: [0-9]+;
 
 HexaOpen	:	'0x';
+
+LabelId 	: ([a-f] | [A-F])+;
 
 Comment
  : ('//' ~[\r\n]* | '/*' .*? '*/') -> skip

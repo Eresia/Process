@@ -109,6 +109,30 @@ public class ScriptBaseListener implements ScriptListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitIntegerDisp(ScriptParser.IntegerDispContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterGotoExpression(ScriptParser.GotoExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitGotoExpression(ScriptParser.GotoExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterLabelExpression(ScriptParser.LabelExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitLabelExpression(ScriptParser.LabelExpressionContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

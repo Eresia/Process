@@ -60,4 +60,16 @@ public interface ScriptVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitIntegerDisp(ScriptParser.IntegerDispContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link ScriptParser#gotoExpression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitGotoExpression(ScriptParser.GotoExpressionContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link ScriptParser#labelExpression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitLabelExpression(ScriptParser.LabelExpressionContext ctx);
 }
