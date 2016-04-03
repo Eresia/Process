@@ -14,10 +14,14 @@ public class ScriptVerify extends ScriptBaseVisitor<Boolean>{
 
 	private final ParseTree tree;
 	private final ArrayList<Integer> variables;
+	private final ArrayList<String> gotos;
+	private final ArrayList<String> labels;
 	
 	public ScriptVerify(ParseTree tree){
 		this.tree = tree;
 		this.variables = new ArrayList<Integer>();
+		gotos = new ArrayList<String>();
+		labels = new ArrayList<String>();
 	}
 	
 	public void verify() throws ErrorInVerificationException{
@@ -25,9 +29,20 @@ public class ScriptVerify extends ScriptBaseVisitor<Boolean>{
 		if(result == null){
 			throw new ErrorInVerificationException("Bad parse");
 		}
-		else if(result == false){
+		
+		if(result){
+			for(String s : gotos){
+				if(!labels.contains(s)){
+					System.err.println("Label " + s + " don't exist");
+					result = false;
+				}
+			}
+		}
+		
+		if(result == false){
 			throw new ErrorInVerificationException("Bad verification");
 		}
+		
 	}
 	
 	@Override 
@@ -121,6 +136,29 @@ public class ScriptVerify extends ScriptBaseVisitor<Boolean>{
 		} catch(NumberFormatException e){
 			System.err.println("Number " + numberS + " too big");
 			return false;
+		}
+		return true;
+	}
+	
+	@Override 
+	public Boolean visitGotoExpression(ScriptParser.GotoExpressionContext ctx) { 
+		String g = ctx.getChild(1).getText();
+		if(!gotos.contains(g)){
+			gotos.add(g);
+		}
+		return true;
+	}
+
+
+	@Override 
+	public Boolean visitLabelExpression(ScriptParser.LabelExpressionContext ctx) { 
+		String l = ctx.getChild(1).getText();
+		if(labels.contains(l)){
+			System.err.println("Label " + l + " already defined");
+			return false;
+		}
+		else{
+			labels.add(l);
 		}
 		return true;
 	}

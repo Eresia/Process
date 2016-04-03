@@ -2,9 +2,10 @@ package script;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.antlr.v4.runtime.tree.TerminalNode;
 import org.antlr.v4.runtime.tree.TerminalNodeImpl;
 
 import antlr.ScriptBaseVisitor;
@@ -18,16 +19,37 @@ public class ScriptExec extends ScriptBaseVisitor<Integer>{
 	private int operationNumber;
 	private int nbMaxInstruction;
 	
+	private final ArrayList<String> instructions;
+	
+	private final HashMap<String, Integer> gotos;
+	private final HashMap<String, Integer> labels;
+	
 	public ScriptExec(ParseTree tree, FileWriter outFile, int nbMaxInstruction){
 		this.tree = tree;
 		this.outFile = outFile;
 		this.nbMaxInstruction = nbMaxInstruction;
+		
+		gotos = new HashMap<String, Integer>();
+		labels = new HashMap<String, Integer>();
+		instructions = new ArrayList<String>();
 	}
 	
-	public void start() throws IOException{
+	public void start(){
 		operationNumber = 0;
 		visit(tree);
-		outFile.write("\t[" + (operationNumber) + ".." + (nbMaxInstruction - 1) + "]\t:\t0;\n");
+		for(String s : gotos.keySet()){
+			String result = new String();
+			Integer op = gotos.get(s);
+			Integer target = labels.get(s);
+			result += Operation.JUMP;
+			result += fullBinaryNumber(Integer.toBinaryString(target), 5, true);
+			result = fullBinaryNumber(result, 16, false);
+			createAndPutInstruction(binaryToDecimalString(result), op);
+		}
+		for(String i : instructions){
+			writeInstruction(i);
+		}
+		writeInstruction("\t[" + (operationNumber) + ".." + (nbMaxInstruction - 1) + "]\t:\t0;");
 	}
 
 	@Override 
@@ -67,7 +89,7 @@ public class ScriptExec extends ScriptBaseVisitor<Integer>{
 			result += Operation.MV;
 			result += var2S;
 			result += varS;
-			writeInstruction(binaryToDecimalString(fullBinaryNumber(result, 16, false)));
+			createInstruction(binaryToDecimalString(fullBinaryNumber(result, 16, false)));
 		}
 		else{
 			String result = new String();
@@ -75,8 +97,8 @@ public class ScriptExec extends ScriptBaseVisitor<Integer>{
 			number = binaryToDecimalString(number);
 			result += Operation.MVI;
 			result += varS;
-			writeInstruction(binaryToDecimalString(fullBinaryNumber(result, 16, false)));
-			writeInstruction(number);
+			createInstruction(binaryToDecimalString(fullBinaryNumber(result, 16, false)));
+			createInstruction(number);
 		}
 		
 		return null;
@@ -92,7 +114,7 @@ public class ScriptExec extends ScriptBaseVisitor<Integer>{
 		result += Operation.NOT;
 		result += varS;
 		result = fullBinaryNumber(result, 16, false);
-		writeInstruction(binaryToDecimalString(result));
+		createInstruction(binaryToDecimalString(result));
 		return null;
 	}
 
@@ -126,7 +148,7 @@ public class ScriptExec extends ScriptBaseVisitor<Integer>{
 		result += var2S;
 		result = fullBinaryNumber(result, 16, false);
 		
-		writeInstruction(binaryToDecimalString(result));
+		createInstruction(binaryToDecimalString(result));
 		
 		return null;
 	}
@@ -139,6 +161,22 @@ public class ScriptExec extends ScriptBaseVisitor<Integer>{
 	@Override 
 	public Integer visitIntegerDisp(ScriptParser.IntegerDispContext ctx) { 
 		return Integer.valueOf(ctx.getText());
+	}
+	
+	@Override 
+	public Integer visitGotoExpression(ScriptParser.GotoExpressionContext ctx) { 
+		String l = ctx.getChild(1).getText();
+		gotos.put(l, operationNumber);
+		operationNumber++;
+		return null;
+	}
+
+
+	@Override 
+	public Integer visitLabelExpression(ScriptParser.LabelExpressionContext ctx) { 
+		String l = ctx.getChild(1).getText();
+		labels.put(l, operationNumber);
+		return null;
 	}
 	
 	private String binaryToDecimalString(String binary){
@@ -163,11 +201,19 @@ public class ScriptExec extends ScriptBaseVisitor<Integer>{
 		return result;
 	}
 	
+	private void createInstruction(String instruction){
+		instructions.add("\t" + operationNumber + "\t:\t" + instruction +";");
+		operationNumber++;
+	}
+	
+	private void createAndPutInstruction(String instruction, int position){
+		instructions.add(position, "\t" + position + "\t:\t" + instruction +";");
+	}
+	
 	private void writeInstruction(String instruction){
 		try {
-			outFile.write("\t" + operationNumber + "\t:\t" + instruction +";");
+			outFile.write(instruction);
 			outFile.write("\n");
-			operationNumber++;
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

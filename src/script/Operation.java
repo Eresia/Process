@@ -8,7 +8,8 @@ public enum Operation {
 	SUB("011"),
 	AND("100"),
 	OR("101"),
-	NOT("110");
+	NOT("110"),
+	JUMP("111");
 	
 	private final String name;
 	

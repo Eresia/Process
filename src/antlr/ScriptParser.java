@@ -115,25 +115,17 @@ public class ScriptParser extends Parser {
 	public final ParseContext parse() throws RecognitionException {
 		ParseContext _localctx = new ParseContext(_ctx, getState());
 		enterRule(_localctx, 0, RULE_parse);
-		try {
-			enterOuterAlt(_localctx, 1);
-			{
-			{
-			setState(20);
-			block();
-			}
-			setState(21);
-			match(EOF);
-			}
+
+		enterOuterAlt(_localctx, 1);
+		{
+		{
+		setState(20);
+		block();
 		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
+		setState(21);
+		match(EOF);
 		}
-		finally {
-			exitRule();
-		}
+		exitRule();
 		return _localctx;
 	}
 
@@ -171,43 +163,35 @@ public class ScriptParser extends Parser {
 		BlockContext _localctx = new BlockContext(_ctx, getState());
 		enterRule(_localctx, 2, RULE_block);
 		int _la;
-		try {
-			enterOuterAlt(_localctx, 1);
+		
+		enterOuterAlt(_localctx, 1);
+		{
+		setState(29);
+		_errHandler.sync(this);
+		_la = _input.LA(1);
+		while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << Not) | (1L << LabelBegin) | (1L << GotoBegin) | (1L << Variable) | (1L << Comment))) != 0)) {
 			{
-			setState(29);
+			{
+			setState(23);
+			line();
+			setState(25);
+			_errHandler.sync(this);
+			switch ( getInterpreter().adaptivePredict(_input,0,_ctx) ) {
+			case 1:
+				{
+				setState(24);
+				match(Comment);
+				}
+				break;
+			}
+			}
+			}
+			setState(31);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << Not) | (1L << LabelBegin) | (1L << GotoBegin) | (1L << Variable) | (1L << Comment))) != 0)) {
-				{
-				{
-				setState(23);
-				line();
-				setState(25);
-				_errHandler.sync(this);
-				switch ( getInterpreter().adaptivePredict(_input,0,_ctx) ) {
-				case 1:
-					{
-					setState(24);
-					match(Comment);
-					}
-					break;
-				}
-				}
-				}
-				setState(31);
-				_errHandler.sync(this);
-				_la = _input.LA(1);
-			}
-			}
 		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
 		}
-		finally {
-			exitRule();
-		}
+		exitRule();
 		return _localctx;
 	}
 
@@ -251,74 +235,66 @@ public class ScriptParser extends Parser {
 	public final LineContext line() throws RecognitionException {
 		LineContext _localctx = new LineContext(_ctx, getState());
 		enterRule(_localctx, 4, RULE_line);
-		try {
-			setState(42);
-			switch (_input.LA(1)) {
-			case Not:
-			case LabelBegin:
-			case GotoBegin:
-			case Variable:
-				enterOuterAlt(_localctx, 1);
+
+		setState(42);
+		switch (_input.LA(1)) {
+		case Not:
+		case LabelBegin:
+		case GotoBegin:
+		case Variable:
+			enterOuterAlt(_localctx, 1);
+			{
+			{
+			setState(37);
+			_errHandler.sync(this);
+			switch ( getInterpreter().adaptivePredict(_input,2,_ctx) ) {
+			case 1:
 				{
-				{
-				setState(37);
-				_errHandler.sync(this);
-				switch ( getInterpreter().adaptivePredict(_input,2,_ctx) ) {
-				case 1:
-					{
-					setState(32);
-					assignVar();
-					}
-					break;
-				case 2:
-					{
-					setState(33);
-					notExpression();
-					}
-					break;
-				case 3:
-					{
-					setState(34);
-					operation();
-					}
-					break;
-				case 4:
-					{
-					setState(35);
-					gotoExpression();
-					}
-					break;
-				case 5:
-					{
-					setState(36);
-					labelExpression();
-					}
-					break;
-				}
-				setState(39);
-				match(EndLine);
-				}
+				setState(32);
+				assignVar();
 				}
 				break;
-			case Comment:
-				enterOuterAlt(_localctx, 2);
+			case 2:
 				{
-				setState(41);
-				match(Comment);
+				setState(33);
+				notExpression();
 				}
 				break;
-			default:
-				throw new NoViableAltException(this);
+			case 3:
+				{
+				setState(34);
+				operation();
+				}
+				break;
+			case 4:
+				{
+				setState(35);
+				gotoExpression();
+				}
+				break;
+			case 5:
+				{
+				setState(36);
+				labelExpression();
+				}
+				break;
 			}
+			setState(39);
+			match(EndLine);
+			}
+			}
+			break;
+		case Comment:
+			enterOuterAlt(_localctx, 2);
+			{
+			setState(41);
+			match(Comment);
+			}
+			break;
+		default:
+			throw new NoViableAltException(this);
 		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
+		exitRule();
 		return _localctx;
 	}
 
@@ -356,46 +332,38 @@ public class ScriptParser extends Parser {
 	public final AssignVarContext assignVar() throws RecognitionException {
 		AssignVarContext _localctx = new AssignVarContext(_ctx, getState());
 		enterRule(_localctx, 6, RULE_assignVar);
-		try {
-			enterOuterAlt(_localctx, 1);
+
+		enterOuterAlt(_localctx, 1);
+		{
+		setState(44);
+		match(Variable);
+		setState(45);
+		match(Equals);
+		setState(49);
+		switch (_input.LA(1)) {
+		case Variable:
 			{
-			setState(44);
+			setState(46);
 			match(Variable);
-			setState(45);
-			match(Equals);
-			setState(49);
-			switch (_input.LA(1)) {
-			case Variable:
-				{
-				setState(46);
-				match(Variable);
-				}
-				break;
-			case Int:
-				{
-				setState(47);
-				integerDisp();
-				}
-				break;
-			case Hexa:
-				{
-				setState(48);
-				hexaDisp();
-				}
-				break;
-			default:
-				throw new NoViableAltException(this);
 			}
+			break;
+		case Int:
+			{
+			setState(47);
+			integerDisp();
 			}
+			break;
+		case Hexa:
+			{
+			setState(48);
+			hexaDisp();
+			}
+			break;
+		default:
+			throw new NoViableAltException(this);
 		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
 		}
-		finally {
-			exitRule();
-		}
+		exitRule();
 		return _localctx;
 	}
 
@@ -424,23 +392,15 @@ public class ScriptParser extends Parser {
 	public final NotExpressionContext notExpression() throws RecognitionException {
 		NotExpressionContext _localctx = new NotExpressionContext(_ctx, getState());
 		enterRule(_localctx, 8, RULE_notExpression);
-		try {
-			enterOuterAlt(_localctx, 1);
-			{
-			setState(51);
-			match(Not);
-			setState(52);
-			match(Variable);
-			}
+
+		enterOuterAlt(_localctx, 1);
+		{
+		setState(51);
+		match(Not);
+		setState(52);
+		match(Variable);
 		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
+		exitRule();
 		return _localctx;
 	}
 
@@ -475,64 +435,56 @@ public class ScriptParser extends Parser {
 	public final OperationContext operation() throws RecognitionException {
 		OperationContext _localctx = new OperationContext(_ctx, getState());
 		enterRule(_localctx, 10, RULE_operation);
-		try {
-			setState(66);
-			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,5,_ctx) ) {
-			case 1:
-				enterOuterAlt(_localctx, 1);
-				{
-				setState(54);
-				match(Variable);
-				setState(55);
-				match(Add);
-				setState(56);
-				match(Variable);
-				}
-				break;
-			case 2:
-				enterOuterAlt(_localctx, 2);
-				{
-				setState(57);
-				match(Variable);
-				setState(58);
-				match(Sub);
-				setState(59);
-				match(Variable);
-				}
-				break;
-			case 3:
-				enterOuterAlt(_localctx, 3);
-				{
-				setState(60);
-				match(Variable);
-				setState(61);
-				match(And);
-				setState(62);
-				match(Variable);
-				}
-				break;
-			case 4:
-				enterOuterAlt(_localctx, 4);
-				{
-				setState(63);
-				match(Variable);
-				setState(64);
-				match(Or);
-				setState(65);
-				match(Variable);
-				}
-				break;
+
+		setState(66);
+		_errHandler.sync(this);
+		switch ( getInterpreter().adaptivePredict(_input,5,_ctx) ) {
+		case 1:
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(54);
+			match(Variable);
+			setState(55);
+			match(Add);
+			setState(56);
+			match(Variable);
 			}
+			break;
+		case 2:
+			enterOuterAlt(_localctx, 2);
+			{
+			setState(57);
+			match(Variable);
+			setState(58);
+			match(Sub);
+			setState(59);
+			match(Variable);
+			}
+			break;
+		case 3:
+			enterOuterAlt(_localctx, 3);
+			{
+			setState(60);
+			match(Variable);
+			setState(61);
+			match(And);
+			setState(62);
+			match(Variable);
+			}
+			break;
+		case 4:
+			enterOuterAlt(_localctx, 4);
+			{
+			setState(63);
+			match(Variable);
+			setState(64);
+			match(Or);
+			setState(65);
+			match(Variable);
+			}
+			break;
 		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
+		exitRule();
 		return _localctx;
 	}
 
@@ -560,21 +512,13 @@ public class ScriptParser extends Parser {
 	public final HexaDispContext hexaDisp() throws RecognitionException {
 		HexaDispContext _localctx = new HexaDispContext(_ctx, getState());
 		enterRule(_localctx, 12, RULE_hexaDisp);
-		try {
-			enterOuterAlt(_localctx, 1);
-			{
-			setState(68);
-			match(Hexa);
-			}
+
+		enterOuterAlt(_localctx, 1);
+		{
+		setState(68);
+		match(Hexa);
 		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
+		exitRule();
 		return _localctx;
 	}
 
@@ -602,21 +546,13 @@ public class ScriptParser extends Parser {
 	public final IntegerDispContext integerDisp() throws RecognitionException {
 		IntegerDispContext _localctx = new IntegerDispContext(_ctx, getState());
 		enterRule(_localctx, 14, RULE_integerDisp);
-		try {
-			enterOuterAlt(_localctx, 1);
-			{
-			setState(70);
-			match(Int);
-			}
+
+		enterOuterAlt(_localctx, 1);
+		{
+		setState(70);
+		match(Int);
 		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
+		exitRule();
 		return _localctx;
 	}
 
@@ -645,23 +581,15 @@ public class ScriptParser extends Parser {
 	public final GotoExpressionContext gotoExpression() throws RecognitionException {
 		GotoExpressionContext _localctx = new GotoExpressionContext(_ctx, getState());
 		enterRule(_localctx, 16, RULE_gotoExpression);
-		try {
-			enterOuterAlt(_localctx, 1);
-			{
-			setState(72);
-			match(GotoBegin);
-			setState(73);
-			match(LabelId);
-			}
+
+		enterOuterAlt(_localctx, 1);
+		{
+		setState(72);
+		match(GotoBegin);
+		setState(73);
+		match(LabelId);
 		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
+		exitRule();
 		return _localctx;
 	}
 
@@ -690,23 +618,15 @@ public class ScriptParser extends Parser {
 	public final LabelExpressionContext labelExpression() throws RecognitionException {
 		LabelExpressionContext _localctx = new LabelExpressionContext(_ctx, getState());
 		enterRule(_localctx, 18, RULE_labelExpression);
-		try {
-			enterOuterAlt(_localctx, 1);
-			{
-			setState(75);
-			match(LabelBegin);
-			setState(76);
-			match(LabelId);
-			}
+
+		enterOuterAlt(_localctx, 1);
+		{
+		setState(75);
+		match(LabelBegin);
+		setState(76);
+		match(LabelId);
 		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
+		exitRule();
 		return _localctx;
 	}
 
