@@ -5,6 +5,7 @@ import java.io.IOException;
 
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNode;
+import org.antlr.v4.runtime.tree.TerminalNodeImpl;
 
 import antlr.ScriptBaseVisitor;
 import antlr.ScriptParser;
@@ -58,9 +59,8 @@ public class ScriptExec extends ScriptBaseVisitor<Integer>{
 		while(!ScriptParser.VOCABULARY.getSymbolicName(variableIndex).equals("Variable")){
 			variableIndex++;
 		}
-		TerminalNode node = (TerminalNode) ctx.getChild(2);
 		
-		if(node.getSymbol().getType() == variableIndex){
+		if(ctx.getChild(2).getClass().equals(TerminalNodeImpl.class)){
 			String result = new String();
 			Integer var2 = Integer.valueOf(new String() + ctx.getChild(2).getText().charAt(1));
 			String var2S = getBinaryRegister(var2);
@@ -71,7 +71,7 @@ public class ScriptExec extends ScriptBaseVisitor<Integer>{
 		}
 		else{
 			String result = new String();
-			String number = Integer.toBinaryString(Integer.valueOf(ctx.getChild(2).getText()));
+			String number = Integer.toBinaryString(visit(ctx.getChild(2)));
 			number = binaryToDecimalString(number);
 			result += Operation.MVI;
 			result += varS;
@@ -133,7 +133,7 @@ public class ScriptExec extends ScriptBaseVisitor<Integer>{
 	
 	@Override 
 	public Integer visitHexaDisp(ScriptParser.HexaDispContext ctx) { 
-		return Integer.parseInt(ctx.getChild(1).getText(), 16);
+		return Integer.parseInt(ctx.getText().substring(2), 16);
 	}
 	
 	@Override 

@@ -65,9 +65,7 @@ public class ScriptVerify extends ScriptBaseVisitor<Boolean>{
 			}
 		}
 		else{
-			Integer number = Integer.valueOf(ctx.getChild(2).getText());
-			if(number > 65535){
-				System.err.println("Number " + number + " too big");
+			if(!visit(ctx.getChild(2))){
 				return false;
 			}
 		}
@@ -92,6 +90,28 @@ public class ScriptVerify extends ScriptBaseVisitor<Boolean>{
 		String var2 = ctx.getChild(2).getText();
 
 		return (checkExpression(var1) && checkExpression(var2));
+	}
+	
+	@Override 
+	public Boolean visitHexaDisp(ScriptParser.HexaDispContext ctx) { 
+		String numberS = ctx.getText().substring(2);
+		Integer number = Integer.parseInt(numberS, 16);
+		if(number > 65535){
+			System.err.println("Number " + numberS + " too big");
+			return false;
+		}
+		return true;
+	}
+	
+	@Override 
+	public Boolean visitIntegerDisp(ScriptParser.IntegerDispContext ctx) { 
+		String numberS = ctx.getText();
+		Integer number = Integer.parseInt(numberS);
+		if(number > 65535){
+			System.err.println("Number " + numberS + " too big");
+			return false;
+		}
+		return true;
 	}
 	
 	private Boolean checkExpression(String var){
