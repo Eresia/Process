@@ -51,7 +51,7 @@ Variable
 ;
 
 Int		: [0-9]+;
-Hexa	: ('a'..'f' | 'A'..'F' | '0'..'9')+;
+Hexa	: ('a'..'f' | 'A'..'F' | Int)+;
 
 HexaOpen	:	'0x';
 
