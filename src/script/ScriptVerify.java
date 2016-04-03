@@ -2,6 +2,7 @@ package script;
 
 import java.util.ArrayList;
 
+import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNodeImpl;
 
@@ -95,8 +96,13 @@ public class ScriptVerify extends ScriptBaseVisitor<Boolean>{
 	@Override 
 	public Boolean visitHexaDisp(ScriptParser.HexaDispContext ctx) { 
 		String numberS = ctx.getText().substring(2);
-		Integer number = Integer.parseInt(numberS, 16);
-		if(number > 65535){
+		try{
+			Integer number = Integer.parseInt(numberS, 16);
+			if(number > 65535){
+				System.err.println("Number " + numberS + " too big");
+				return false;
+			}
+		} catch(NumberFormatException e){
 			System.err.println("Number " + numberS + " too big");
 			return false;
 		}
@@ -106,12 +112,23 @@ public class ScriptVerify extends ScriptBaseVisitor<Boolean>{
 	@Override 
 	public Boolean visitIntegerDisp(ScriptParser.IntegerDispContext ctx) { 
 		String numberS = ctx.getText();
-		Integer number = Integer.parseInt(numberS);
-		if(number > 65535){
+		try{
+			Integer number = Integer.parseInt(numberS);
+			if(number > 65535){
+				System.err.println("Number " + numberS + " too big");
+				return false;
+			}
+		} catch(NumberFormatException e){
 			System.err.println("Number " + numberS + " too big");
 			return false;
 		}
 		return true;
+	}
+	
+	@Override 
+	public Boolean visitErrorNode(ErrorNode node) { 
+		System.err.println("Error in parsage");
+		return false;
 	}
 	
 	private Boolean checkExpression(String var){

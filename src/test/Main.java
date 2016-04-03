@@ -2,6 +2,8 @@ package test;
 
 import java.io.IOException;
 
+import org.antlr.v4.runtime.RecognitionException;
+
 import exception.ErrorInVerificationException;
 import script.ScriptLaunch;
 
@@ -13,6 +15,8 @@ public class Main {
 			launch.start();
 		} catch (IOException | ErrorInVerificationException e) {
 			System.err.println(e.getMessage());
+		} catch(RecognitionException e){
+			System.err.println("Error in parsage");
 		}
 	}
 

@@ -7,6 +7,7 @@ import java.io.IOException;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 import antlr.ScriptLexer;
@@ -21,7 +22,7 @@ public class ScriptLaunch {
 	private final static String begin = "WIDTH=16;\nDEPTH=32;\n\nADDRESS_RADIX=UNS;\nDATA_RADIX=UNS;\n\nCONTENT BEGIN\n";
 	private final static String end = "END;";
 	
-	public ScriptLaunch(String scriptFilePath, String outFilePath, int nbMaxInstruction) throws IOException, ErrorInVerificationException{
+	public ScriptLaunch(String scriptFilePath, String outFilePath, int nbMaxInstruction) throws IOException, ErrorInVerificationException, RecognitionException{
 		outFile = new FileWriter(new File(outFilePath));
 		
 		final ANTLRInputStream in = new ANTLRInputStream(new FileReader(scriptFilePath));
