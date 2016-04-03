@@ -34,7 +34,7 @@ operation
  | Variable Or Variable
  ;
 
-hexaDisp	: HexaOpen Hexa;
+hexaDisp	: Hexa;
 integerDisp	: Int;
 
 Equals		: '=' ;
@@ -50,8 +50,8 @@ Variable
 : 'R' [0-7]
 ;
 
+Hexa	: HexaOpen ([a-z] | [A-Z] | [0-9])+;
 Int		: [0-9]+;
-Hexa	: ('a'..'f' | 'A'..'F' | Int)+;
 
 HexaOpen	:	'0x';
 
