@@ -1,0 +1,41 @@
+//On définit le label "begin"
+  label begin;
+  //On mets la valeur 1 dans le registre R0
+  R0 = 1;
+  //On mets la valeur 2 dans le registre R1
+  R1 = 2;
+
+  //On additionne les registres R0 et R1 et on stocke le résultat dans R0
+  R0 + R1;
+
+  //On mets la valeur 4 dans le registre R1
+  R1 = 4;
+  //On mets la valeur 5 dans le registre R2
+  R2 = 5;
+
+  //On additionne les registres R1 et R2 et on stocke le r�sultat dans R1
+  R1 + R2;
+
+  //On soustrait les registres R1 et R0 et on stocke le r�sultat dans R1
+  R1 - R0;
+
+  //On mets la valeur 107 dans le registre R2
+  R2 = 107;
+  //On mets la valeur 45 dans le registre R3
+  R3 = 45;
+
+  //On mets la valeur du registre R2 dans le registre R4
+  R4 = R2;
+  //On fait l'op�ration logique "ET" entre les registres R4 et R3 et on stocke le r�sultat dans R3
+  R4 & R3;
+
+  //On mets la valeur du registre R2 dans le registre R4
+  R4 = R2;
+  //On fait l'opération logique "ET" entre les registres R4 et R3 et on stocke le résultat dans R3
+  R4 | R3;
+
+  //On inverse logiquement le registre R3
+  !R3;
+
+  //On retourne au label "begin"
+  goto begin;

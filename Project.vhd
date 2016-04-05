@@ -34,7 +34,9 @@ PORT (
 	OPPrint: OUT std_logic_vector(0 TO 2);
 	whichWrite: OUT std_logic_vector(0 TO 7);
 	addPrint: OUT std_logic_vector(0 TO 15);
-	R0, R1, R2, R3: OUT std_logic_vector(0 TO 15)
+	R0, R1, R2, R3: OUT std_logic_vector(0 TO 15);
+	newInstruction : OUT std_logic_vector(0 TO 4);
+	hasNewInstruction : OUT std_logic
 );
 END Component;
 
@@ -50,8 +52,10 @@ Component Counter IS
 PORT
 	(
 		Clock, Reset : IN std_logic;
+		newInstruction : IN std_logic_vector(0 TO 4);
+		hasNewInstruction : IN std_logic;
 		instructionState : OUT integer;
-		addr : OUT std_logic_vector( 4 DOWNTO 0)
+		addr : OUT std_logic_vector(0 TO 4)
 	);
 END Component;
 
@@ -102,6 +106,9 @@ signal memoryResultInvers: std_logic_vector(0 TO 15);
 signal R0, R1, R2, R3: std_logic_vector(0 TO 15);
 signal s_addr_count : std_LOGIC_VECTOR(0 TO 4);
 signal s_addr_memory : std_logic_vector(4 DOWNTO 0);
+
+Signal newInstruction: std_logic_vector(0 TO 4);
+Signal hasNewInstruction: std_logic := '0';
 	
 BEGIN
 	debounc0 : debouncer PORT MAP (KEY(0), CLOCK_50, so);
@@ -109,10 +116,11 @@ BEGIN
 	nso <= not so;
 	nsoR <= not soR;
 	proc0: Proc port map(Clock=>nso, Run=>SW(17), Reset=>soR, DIN=>DIN, Done=>Done, Overflow=>LEDG(7), B=>B, State=>State, OPPrint=>OPPrint, whichWrite=>whichWrite, 
-				addPrint=>addPrint, R0=>R0, R1=>R1, R2=>R2, R3=>R3);
+				addPrint=>addPrint, R0=>R0, R1=>R1, R2=>R2, R3=>R3, newInstruction=>newInstruction, hasNewInstruction=>hasNewInstruction);
 	
 	--Notre compteur
-	counter0 : Counter port map(Clock=>Done, Reset=> nsoR, addr=> s_addr_count, instructionState => instructionStates);
+	counter0 : Counter port map(Clock=>Done, Reset=> nsoR, addr=> s_addr_count, instructionState => instructionStates, 
+											newInstruction=>newInstruction, hasNewInstruction=>hasNewInstruction);
 				
 	--Notre mémoire
 	memory_rom : rom port map(address=>s_addr_memory, clock=>Done, q=>memoryResult);

@@ -10,7 +10,9 @@ PORT(
 	Sel: OUT std_logic_vector(0 TO 4);
 	Done: OUT std_logic;
 	State: OUT Integer;
-	OPPrint: OUT std_logic_vector(0 TO 2)
+	OPPrint: OUT std_logic_vector(0 TO 2);
+	newInstruction : OUT std_logic_vector(0 TO 4) := "00000";
+	hasNewInstruction : OUT std_logic := '0'
 );
 END Control;
 
@@ -28,6 +30,7 @@ Signal Ns, Ts: Integer;
 Signal Rx: std_logic_vector(0 To 7);
 Signal DemI: std_logic_vector(0 TO 2);
 Signal DemO: std_logic_vector(0 TO 7);
+Signal hnI: std_logic;
 BEGIN
 	demux0: Demux port map(I=>DemI, O=>DemO);
 	
@@ -39,7 +42,7 @@ BEGIN
 					11 when "100",
 					13 when "101",
 					15 when "110",
-					0 when OTHERS;
+					16 when "111";
 	
 	NSL: PROCESS(Cs, OP, Run)
 	BEGIN
@@ -77,6 +80,8 @@ BEGIN
 					Ns <= 8;
 				when 15 =>
 					Ns <= 8;
+				when 16 =>
+					Ns <= 1;
 				when OTHERS => NULL;
 			end case;
 		end if;
@@ -92,6 +97,8 @@ BEGIN
 				when 1 =>
 					Set(0) <= '1';
 					Done <= '1';
+				when 2 =>
+					hnI <= '0';
 				when 3 =>
 					Sel(2 TO 4) <= OP(3 TO 5);
 					DemI <= OP(6 TO 8);
@@ -138,6 +145,9 @@ BEGIN
 					Sel(2 TO 4) <= OP(3 TO 5);
 					Set(2) <= '1';
 					Set(3 TO 5) <= "100";
+				when 16 =>
+					hnI <= '1';
+					newInstruction <= OP(3 TO 7);
 				when OTHERS => NULL;
 			end case;
 		end if;

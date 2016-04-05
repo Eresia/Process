@@ -12,7 +12,9 @@ PORT (
 	OPPrint: OUT std_logic_vector(0 TO 2);
 	whichWrite: OUT std_logic_vector(0 TO 7);
 	addPrint: OUT std_logic_vector(0 TO 15);
-	R0, R1, R2, R3 : OUT std_logic_vector(0 TO 15)
+	R0, R1, R2, R3 : OUT std_logic_vector(0 TO 15);
+	newInstruction : OUT std_logic_vector(0 TO 4);
+	hasNewInstruction : OUT std_logic
 );
 END proc;
 
@@ -26,7 +28,9 @@ Component Control IS
 		Sel: OUT std_logic_vector(0 TO 4);
 		Done: OUT std_logic;
 		State: OUT Integer;
-		OPPrint: OUT std_logic_vector(0 TO 2)
+		OPPrint: OUT std_logic_vector(0 TO 2);
+		newInstruction : OUT std_logic_vector(0 TO 4);
+		hasNewInstruction : OUT std_logic
 	);
 END Component;
 
@@ -75,8 +79,10 @@ Signal Set: std_logic_vector(0 TO 13);
 Signal Sel: std_logic_vector(0 TO 4);
 Signal RSel: std_logic_vector(0 TO 2);
 Signal Cout: std_logic;
+
 BEGIN
-	control0: Control port map(OP=>IR, Run=>Run, Reset=>Reset, Clock=>Clock, Set=>Set, Sel=>Sel, Done=>Done, State=>State, OPPrint=>OPPrint);
+	control0: Control port map(OP=>IR, Run=>Run, Reset=>Reset, Clock=>Clock, Set=>Set, Sel=>Sel, Done=>Done, State=>State, OPPrint=>OPPrint,
+											newInstruction=>newInstruction, hasNewInstruction=>hasNewInstruction);
 	mux0: Mux_Proc port map(Sel=>Sel, G=>G, DIN=>DIN, R0=>R(0), R1=>R(1), R2=>R(2), R3=>R(3), R4=>R(4), R5=>R(5), R6=>R(6), R7=>R(7), B=>B_s);
 	alu0: ALU port map(A=>A, B=>B_s, Operation=>Set(3 TO 5), S=>Gin, Overflow=>Overflow);
 	boucle: for i in 0 TO 7 generate
